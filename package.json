@@ -1,0 +1,27 @@
+{
+  "name": "codem-ffmpeg",
+  "version": "0.1.0",
+  "description": "Wrapper for ffmpeg",
+  "keywords": ["transcoding", "ffmpeg", "video"],
+  "homepage": "https://github.com/madebyhiro/codem-ffmpeg",
+  "main": "src/codem-ffmpeg",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/madebyhiro/codem-ffmpeg"
+  },
+  "bugs": {
+    "url": "https://github.com/madebyhiro/codem-ffmpeg/issues"
+  },
+  "author": {
+    "name": "Sjoerd Tieleman",
+    "email": "sjoerd@madebyhiro.com",
+    "url": "http://madebyhiro.com/"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "jasmine-node": "^1.14.5"
+  },
+  "scripts": {
+    "test": "jasmine-node test/spec"
+  }
+}
