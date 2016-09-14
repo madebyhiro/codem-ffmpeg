@@ -17,11 +17,14 @@
     "email": "sjoerd@madebyhiro.com",
     "url": "http://madebyhiro.com/"
   },
+  "engines": {
+    "node": ">=6.4.0"
+  },
   "license": "MIT",
   "devDependencies": {
-    "jasmine-node": "^1.14.5"
+    "jasmine": "=2.4.1"
   },
   "scripts": {
-    "test": "jasmine-node test/spec"
+    "test": "jasmine"
   }
 }
