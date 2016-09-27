@@ -6,7 +6,7 @@ describe('FFmpeg creation', () => {
     expect(instance).toBeDefined()
   })
   
-  it('should not accept anything other', () => {
+  it('should raise an error for anything else than an array', () => {
     expect(() => {
       new FFmpeg('foo')
     }).toThrowError('Expected arguments to be an array')
@@ -30,8 +30,56 @@ describe('FFmpeg spawning', () => {
     it('should spawn the correct FFmpeg', () => {
       const instance = new FFmpeg([])
       instance.ffmpegBinary = '/usr/local/no/such/ffmpeg'
+      instance.on('error', () => {})
+
       const child_process = instance.spawn()
-      expect(child_process.spawnfile).toEqual(instance.ffmpegBinary)
+      expect(child_process.spawnfile).toEqual(instance.ffmpegBinary)        
     })
+  })
+})
+
+describe('Progress', () => {
+  const FFmpeg = require('../src/codem-ffmpeg')
+  let instance
+  
+  beforeEach(() => {
+    instance = new FFmpeg(['foo', 'bar'])    
+  })
+  
+  it('should return null when there is no progress to report yet', () => {
+    expect(instance.progress).toEqual(null)
+  })
+  
+  it('should return the correct progress when it is available', () => {
+    instance._progress = 0.25
+    expect(instance.progress).toEqual(0.25)
+  })
+})
+
+describe('Events', () => {
+  const FFmpeg = require('../src/codem-ffmpeg')
+  let instance
+  
+  beforeEach(() => {
+    instance = new FFmpeg([])
+  })
+  
+  it('should emit the exit event with the code', (done) => {
+    instance.spawn()
+
+    instance.on('exit', (code) => {
+      expect(code).toEqual(1)
+      done()
+    })    
+  })
+  
+  it('should emit the correct error event when the binary can\'t launch', (done) => {
+    instance.ffmpegBinary = '/usr/local/no/such/ffmpeg'
+    instance.spawn()
+    
+    instance.on('error', (error) => {
+      expect(error).toEqual(Error("Unable to spawn the ffmpeg binary"))
+      done()
+    })        
   })
 })
