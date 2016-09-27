@@ -51,7 +51,8 @@ describe('Progress', () => {
   })
   
   it('should return the correct progress when it is available', () => {
-    instance._progress = 0.25
+    instance._duration = 10
+    instance._current = 2.5
     expect(instance.progress).toEqual(0.25)
   })
 })
