@@ -4,7 +4,7 @@
 
 # Example usage
 
-```
+```javascript
 const FFmpeg = require('codem-ffmpeg')
 
 let instance = new FFmpeg(['-i', 'input.mp4', '-y', 'output.mp4'])
@@ -14,11 +14,11 @@ instance.on('progress', (progress) => {
 })
 
 instance.on('exit', (code) => {
-  console.log("FFmpeg exited: ", code)
+  console.log("FFmpeg exited:", code)
 })
 
 instance.on('error', (error) => {
-  console.log("FFmpeg error: ", error)
+  console.log("FFmpeg error:", error)
 })
 
 instance.spawn()

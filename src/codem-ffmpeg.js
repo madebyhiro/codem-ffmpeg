@@ -33,7 +33,7 @@ class FFmpeg extends EventEmitter {
   }
   
   _extractDuration(text) {
-    if (!this._durationBuffer) this._durationBuffer = ""
+    if (typeof this._durationBuffer === 'undefined') this._durationBuffer = ""
     this._durationBuffer += text
     
     let durationMatcher = new RegExp(/Duration:\s+(\d{2}):(\d{2}):(\d{2}).(\d{1,2})/)
@@ -67,10 +67,11 @@ class FFmpeg extends EventEmitter {
   }
   
   _processData(data) {
-    if (this._duration) {
-      this._extractProgress(data.toString())
+    let text = data.toString()
+    if (typeof this._duration === 'undefined') {
+      this._extractDuration(text)
     } else {
-      this._extractDuration(data.toString())
+      this._extractProgress(text)
     }
   }
 }
