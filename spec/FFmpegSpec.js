@@ -85,6 +85,8 @@ describe('Events', () => {
   })
   
   it('should emit progress events during transcoding', (done) => {
+    // Fixture generated with:
+    // ffmpeg -t 60 -s qcif -f rawvideo -pix_fmt rgb24 -r 25 -i /dev/zero -pix_fmt yuv420p -profile:v baseline -s 320x180 black.mp4
     instance = new FFmpeg(['-i', 'spec/support/fixtures/black.mp4', '-f', 'null', '-vcodec', 'libx264', '/dev/null'])
     let receivedProgress = false
     
