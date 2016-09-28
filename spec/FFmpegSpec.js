@@ -83,4 +83,23 @@ describe('Events', () => {
       done()
     })        
   })
+  
+  it('should emit progress events during transcoding', (done) => {
+    instance = new FFmpeg(['-i', 'spec/support/fixtures/black.mp4', '-f', 'null', '-vcodec', 'libx264', '/dev/null'])
+    let receivedProgress = false
+    
+    instance.on('exit', (code) => {
+      if (receivedProgress) {
+        done()
+      } else {
+        fail("No progress events received")
+      }
+    })
+    
+    instance.on('progress', (progress) => {
+      receivedProgress = true
+    })
+    
+    instance.spawn()
+  })
 })
