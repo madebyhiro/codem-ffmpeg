@@ -1,7 +1,7 @@
 {
   "name": "codem-ffmpeg",
   "version": "0.1.0",
-  "description": "Wrapper for ffmpeg",
+  "description": "Simple wrapper for FFmpeg",
   "keywords": ["transcoding", "ffmpeg", "video"],
   "homepage": "https://github.com/madebyhiro/codem-ffmpeg",
   "main": "src/codem-ffmpeg",
@@ -15,7 +15,7 @@
   "author": {
     "name": "Sjoerd Tieleman",
     "email": "sjoerd@madebyhiro.com",
-    "url": "http://madebyhiro.com/"
+    "url": "https://madebyhiro.com/"
   },
   "engines": {
     "node": ">=6.4.0"
