@@ -34,8 +34,7 @@ instance.cancel()
 
 # Running tests
 
-`codem-ffmpeg` features a test suite written using Jasmine. Checkout the code, install the dependencies and run:
-
+`codem-ffmpeg` features a test suite written using Jasmine. Checkout the code, install the dependencies (make sure you have FFmpeg available on your path) and run:
 ```
 # git clone https://github.com/madebyhiro/codem-ffmpeg.git
 # cd codem-ffmpeg
