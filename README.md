@@ -31,3 +31,11 @@ instance.spawn()
 // Cancel a running process
 instance.cancel()
 ```
+
+# Running tests
+
+`codem-ffmpeg` features a test suite written using Jasmine. Checkout the code, install the dependencies and run:
+
+```
+# npm test
+```
