@@ -37,5 +37,8 @@ instance.cancel()
 `codem-ffmpeg` features a test suite written using Jasmine. Checkout the code, install the dependencies and run:
 
 ```
+# git clone https://github.com/madebyhiro/codem-ffmpeg.git
+# cd codem-ffmpeg
+# npm install
 # npm test
 ```
