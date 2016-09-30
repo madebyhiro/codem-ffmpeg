@@ -22,14 +22,20 @@ class FFmpeg extends EventEmitter {
     this._args = args
   }
   
+  cancel() {
+    if (this._child_process) {
+      this._child_process.kill('SIGINT');
+    }
+  }
+  
   spawn() {
-    let child_process = spawn(this.ffmpegBinary, this._args)
+    this._child_process = spawn(this.ffmpegBinary, this._args)
 
-    child_process.stderr.on('data', (data) => { this._processData(data) })
-    child_process.on('error', (err)        => { this.emit('error', ERRORS.SpawnError) })
-    child_process.on('exit', (code)        => { this.emit('exit', code) })
+    this._child_process.stderr.on('data', (data)  => { this._processData(data) })
+    this._child_process.on('error', (err)         => { this.emit('error', ERRORS.SpawnError) })
+    this._child_process.on('exit', (code, signal) => { this.emit('exit', code, signal) })
     
-    return child_process
+    return this._child_process
   }
   
   _extractDuration(text) {

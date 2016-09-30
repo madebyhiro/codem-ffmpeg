@@ -38,6 +38,21 @@ describe('FFmpeg spawning', () => {
   })
 })
 
+describe('FFmpeg cancelling', () => {
+  const FFmpeg = require('../src/codem-ffmpeg')
+
+  it('should exit with the correct code', (done) => {
+    const instance = new FFmpeg(['-i', 'spec/support/fixtures/black.mp4', '-f', 'null', '-vcodec', 'libx264', '/dev/null'])
+    instance.on('exit', (code, signal) => {
+      expect(signal).toEqual('SIGINT')
+      done()
+    })
+
+    instance.spawn()
+    instance.cancel()
+  })
+})
+
 describe('Progress', () => {
   const FFmpeg = require('../src/codem-ffmpeg')
   let instance
