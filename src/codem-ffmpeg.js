@@ -42,12 +42,12 @@ class FFmpeg extends EventEmitter {
     if (typeof this._durationBuffer === 'undefined') this._durationBuffer = ""
     this._durationBuffer += text
     
-    let durationMatcher = new RegExp(/Duration:\s+(\d{2}):(\d{2}):(\d{2}).(\d{1,2})/)
+    let durationMatcher = new RegExp(/Duration:\s+(\d{2}):(\d{2}):(\d{2})\.\d+/)
     let durationMatch = durationMatcher.exec(this._durationBuffer)
 
     if (durationMatch == null) return
 
-    let [hours, minutes, seconds] = [parseInt(durationMatch[1], 10), parseInt(durationMatch[2], 10), parseInt(durationMatch[3], 10)]
+    let [hours, minutes, seconds] = durationMatch.slice(1,4).map(t => parseInt(t, 10))
       
     this._duration = hours * 3600 + minutes * 60 + seconds
     this._current = 0
@@ -59,8 +59,8 @@ class FFmpeg extends EventEmitter {
     let timeMatch = timeMatcher.exec(text)
 
     if (timeMatch == null) return
-      
-    let [hours, minutes, seconds] = [parseInt(timeMatch[1], 10), parseInt(timeMatch[2], 10), parseInt(timeMatch[3], 10)]
+    
+    let [hours, minutes, seconds] = timeMatch.slice(1,4).map(t => parseInt(t, 10))
     let newCurrent = hours * 3600 + minutes * 60 + seconds
 
     if (newCurrent == this._current) return
