@@ -47,9 +47,8 @@ class FFmpeg extends EventEmitter {
 
     if (durationMatch == null) return
 
-    let hours = parseInt(durationMatch[1], 10),
-        minutes = parseInt(durationMatch[2], 10),
-        seconds = parseInt(durationMatch[3], 10)
+    let [hours, minutes, seconds] = [parseInt(durationMatch[1], 10), parseInt(durationMatch[2], 10), parseInt(durationMatch[3], 10)]
+      
     this._duration = hours * 3600 + minutes * 60 + seconds
     this._current = 0
     this.emit('progress', this.progress)
@@ -61,9 +60,7 @@ class FFmpeg extends EventEmitter {
 
     if (timeMatch == null) return
       
-    let hours = parseInt(timeMatch[1], 10),
-        minutes = parseInt(timeMatch[2], 10),
-        seconds = parseInt(timeMatch[3], 10)
+    let [hours, minutes, seconds] = [parseInt(timeMatch[1], 10), parseInt(timeMatch[2], 10), parseInt(timeMatch[3], 10)]
     let newCurrent = hours * 3600 + minutes * 60 + seconds
 
     if (newCurrent == this._current) return
