@@ -72,6 +72,31 @@ describe('Progress', () => {
   })
 })
 
+describe('Output', () => {
+  const FFmpeg = require('../src/codem-ffmpeg')
+  let instance
+  
+  beforeEach(() => {
+    instance = new FFmpeg(['foo', 'bar'])
+  })
+  
+  it('should return null when there is no output to report yet', () => {
+    expect(instance.output).toEqual(null)
+  })
+  
+  it('should return the FFmpeg output after spawning', (done) => {
+    instance.on('exit', (code, signal) => {
+      let output = instance.output
+      
+      expect(typeof output).toBe("string")
+      expect(output.length).toBeGreaterThan(0)
+      done()
+    })
+
+    instance.spawn()
+  })
+})
+
 describe('Events', () => {
   const FFmpeg = require('../src/codem-ffmpeg')
   let instance

@@ -10,6 +10,9 @@ class FFmpeg extends EventEmitter {
   get ffmpegBinary ()          { return this._ffmpegBinary || 'ffmpeg' }
   set ffmpegBinary (newBinary) { this._ffmpegBinary = newBinary }
   
+  get output () {
+    return this._output || null
+  }
   get progress ()              {
     if (typeof this._duration === 'undefined' || typeof this._current === 'undefined') return null
     return Math.min(this._current / this._duration)
@@ -35,6 +38,7 @@ class FFmpeg extends EventEmitter {
     this._child_process.on('error', (err)         => { this.emit('error', ERRORS.SpawnError) })
     this._child_process.on('exit', (code, signal) => { this.emit('exit', code, signal) })
     
+    this._output = ""
     return this._child_process
   }
   
@@ -71,6 +75,7 @@ class FFmpeg extends EventEmitter {
   
   _processData(data) {
     let text = data.toString()
+    this._output += text
     if (typeof this._duration === 'undefined') {
       this._extractDuration(text)
     } else {
