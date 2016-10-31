@@ -22,8 +22,8 @@ describe('FFmpeg spawning', () => {
   const FFmpeg = require('../src/codem-ffmpeg')
 
   it('should spawn the default FFmpeg', () => {
-    const child_process = new FFmpeg([]).spawn()
-    expect(child_process.spawnfile).toEqual('ffmpeg')
+    const childProcess = new FFmpeg([]).spawn()
+    expect(childProcess.spawnfile).toEqual('ffmpeg')
   })
   
   describe('with a different FFmpeg', () => {
@@ -32,8 +32,8 @@ describe('FFmpeg spawning', () => {
       instance.ffmpegBinary = '/usr/local/no/such/ffmpeg'
       instance.on('error', () => {})
 
-      const child_process = instance.spawn()
-      expect(child_process.spawnfile).toEqual(instance.ffmpegBinary)        
+      const childProcess = instance.spawn()
+      expect(childProcess.spawnfile).toEqual(instance.ffmpegBinary)        
     })
   })
 })
@@ -144,4 +144,54 @@ describe('Events', () => {
     
     instance.spawn()
   })
+})
+
+describe('Custom attributes', () => {
+  const FFmpeg = require('../src/codem-ffmpeg')
+  let instance
+  
+  beforeEach(() => {
+    instance = new FFmpeg(['-i', 'spec/support/fixtures/black.mp4', '-f', 'null', '-vcodec', 'libx264', '/dev/null'])
+  })
+  
+  it('should expose a map of custom attributes', () => {
+    expect(instance.attributes instanceof Map).toEqual(true)
+    expect(Array.from(instance.attributes.keys())).toEqual([ 'filesize', 'duration', 'inputFile', 'outputFile' ])
+  })
+  
+  it('should set the duration when available', (done) => {
+    instance.on('exit', (code, signal) => {
+      expect(instance.attributes.get('duration')).toEqual(60)
+      done()
+    })
+
+    instance.spawn()
+  })
+  
+  it('should set the filesize when available', (done) => {
+    instance.on('exit', (code, signal) => {
+      expect(instance.attributes.get('filesize')).toEqual(25091)
+      done()
+    })
+
+    instance.spawn()
+  })
+
+  it('should set the inputFile when available', (done) => {
+    instance.on('exit', (code, signal) => {
+      expect(instance.attributes.get('inputFile')).toEqual('spec/support/fixtures/black.mp4')
+      done()
+    })
+
+    instance.spawn()
+  })
+
+  it('should set the outputFile when available', (done) => {
+    instance.on('exit', (code, signal) => {
+      expect(instance.attributes.get('outputFile')).toEqual('/dev/null')
+      done()
+    })
+
+    instance.spawn()
+  })  
 })
