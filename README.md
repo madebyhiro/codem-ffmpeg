@@ -18,6 +18,10 @@ instance.on('progress', (progress) => {
 // Exit handler
 instance.on('exit', (code, signal) => {
   console.log("FFmpeg exited:", code, signal)
+  
+  // Custom attributes that expose additional information about the process/file,
+  // e.g. input/output file, input duration, filesize
+  console.log(instance.attributes)
 })
 
 // Error handler
