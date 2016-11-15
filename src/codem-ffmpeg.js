@@ -4,12 +4,20 @@ const fs           = require('fs')
 
 const ERRORS = {
   ArgumentError: new Error("Expected arguments to be an array"),
+  ConfigError:   new Error("Expected config to be a map"),
   SpawnError:    new Error("Unable to spawn the ffmpeg binary")
 }
 
+let _config = new Map()
+
 class FFmpeg extends EventEmitter {
-  get ffmpegBinary ()          { return this._ffmpegBinary || 'ffmpeg' }
-  set ffmpegBinary (newBinary) { this._ffmpegBinary = newBinary }
+  static get config () { return _config }
+  static set config (newConfig) {
+    if (!(newConfig instanceof Map)) throw ERRORS.ConfigError
+    _config = newConfig
+  }
+  
+  get ffmpegBinary ()          { return _config.get('ffmpegBinary') || 'ffmpeg' }
   
   get attributes () {
     return new Map([

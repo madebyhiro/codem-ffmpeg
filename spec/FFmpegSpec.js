@@ -1,6 +1,10 @@
 describe('FFmpeg creation', () => {
   const FFmpeg = require('../src/codem-ffmpeg')
 
+  beforeEach(() => {
+    FFmpeg.config = new Map()
+  })
+  
   it('should accept an array of arguments', () => {
     let instance = new FFmpeg(['foo', 'bar'])
     expect(instance).toBeDefined()
@@ -18,8 +22,26 @@ describe('FFmpeg creation', () => {
   })
 })
 
+describe('FFmpeg config', () => {
+  const FFmpeg = require('../src/codem-ffmpeg')
+
+  beforeEach(() => {
+    FFmpeg.config = new Map()
+  })
+  
+  it('should reject a config that is not a map', () => {
+    expect(() => {
+      FFmpeg.config = 'foo'
+    }).toThrowError('Expected config to be a map')
+  })  
+})
+
 describe('FFmpeg spawning', () => {
   const FFmpeg = require('../src/codem-ffmpeg')
+
+  beforeEach(() => {
+    FFmpeg.config = new Map()
+  })
 
   it('should spawn the default FFmpeg', () => {
     const childProcess = new FFmpeg([]).spawn()
@@ -28,8 +50,8 @@ describe('FFmpeg spawning', () => {
   
   describe('with a different FFmpeg', () => {
     it('should spawn the correct FFmpeg', () => {
+      FFmpeg.config = new Map([['ffmpegBinary', '/usr/local/no/such/ffmpeg']])
       const instance = new FFmpeg([])
-      instance.ffmpegBinary = '/usr/local/no/such/ffmpeg'
       instance.on('error', () => {})
 
       const childProcess = instance.spawn()
@@ -40,6 +62,10 @@ describe('FFmpeg spawning', () => {
 
 describe('FFmpeg cancelling', () => {
   const FFmpeg = require('../src/codem-ffmpeg')
+
+  beforeEach(() => {
+    FFmpeg.config = new Map()
+  })
 
   it('should exit with the correct code', (done) => {
     const instance = new FFmpeg(['-i', 'spec/support/fixtures/black.mp4', '-f', 'null', '-vcodec', 'libx264', '/dev/null'])
@@ -58,6 +84,7 @@ describe('Progress', () => {
   let instance
   
   beforeEach(() => {
+    FFmpeg.config = new Map()
     instance = new FFmpeg(['foo', 'bar'])    
   })
   
@@ -77,6 +104,7 @@ describe('Output', () => {
   let instance
   
   beforeEach(() => {
+    FFmpeg.config = new Map()
     instance = new FFmpeg(['foo', 'bar'])
   })
   
@@ -102,6 +130,7 @@ describe('Events', () => {
   let instance
   
   beforeEach(() => {
+    FFmpeg.config = new Map()
     instance = new FFmpeg([])
   })
   
@@ -115,7 +144,7 @@ describe('Events', () => {
   })
   
   it('should emit the correct error event when the binary can\'t launch', (done) => {
-    instance.ffmpegBinary = '/usr/local/no/such/ffmpeg'
+    FFmpeg.config = new Map([ ['ffmpegBinary', '/usr/local/no/such/ffmpeg']])
     instance.spawn()
     
     instance.on('error', (error) => {
@@ -151,6 +180,7 @@ describe('Custom attributes', () => {
   let instance
   
   beforeEach(() => {
+    FFmpeg.config = new Map()
     instance = new FFmpeg(['-i', 'spec/support/fixtures/black.mp4', '-f', 'null', '-vcodec', 'libx264', '/dev/null'])
   })
   
