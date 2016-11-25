@@ -8,6 +8,12 @@ const ERRORS = {
   SpawnError:    new Error("Unable to spawn the ffmpeg binary")
 }
 
+const WARNINGS = {
+  NoOverwriteOptionFound: "The job arguments did not include the output overwrite option (\"-y\"). " +
+                           "This can potentially cause a job to hang indefinitely. We recommend you add this " +
+                           "option unless you're absolutely sure the output file does not already exist."
+}
+
 let _config = new Map()
 
 class FFmpeg extends EventEmitter {
@@ -46,9 +52,11 @@ class FFmpeg extends EventEmitter {
   
   constructor(args) {
     if (!Array.isArray(args)) throw ERRORS.ArgumentError
-    
+
     super()
     this._args = args
+    
+      if (!args.includes("-y")) setImmediate(() => { this.emit('log', 'warn', WARNINGS.NoOverwriteOptionFound) })
   }
   
   cancel() {

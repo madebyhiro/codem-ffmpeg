@@ -20,6 +20,16 @@ describe('FFmpeg creation', () => {
     let instance = new FFmpeg(['foo', 'bar'])
     expect(instance._args).toEqual(['foo', 'bar'])
   })
+  
+  it('should emit a warning if "-y" is not specified', (done) => {
+    let instance = new FFmpeg(['-i', 'spec/support/fixtures/black.mp4', '-f', 'null', '-vcodec', 'libx264', '/dev/null'])
+    
+    instance.on('log', (level, msg) => {
+      expect(level).toEqual('warn')
+      expect(msg.includes("hang indefinitely")).toBe(true)
+      done()
+    })
+  })
 })
 
 describe('FFmpeg config', () => {
